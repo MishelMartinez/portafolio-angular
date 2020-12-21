@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { InfoPage } from '../interfaces/info.interfaces';
+import { InfoPage, datosPage } from '../interfaces/info.interfaces';
+
 
 
 
@@ -11,16 +12,38 @@ export class InfoPaginaService {
 
   info: InfoPage = {};
   cargada = false;
-
+  equipo:any[] =[];
   constructor( private http: HttpClient) {
 
-    this.http.get('/assets/data/info.json')
-      .subscribe( (resp:InfoPage) => {
+    this.cargarInfo();
 
-        this.cargada = true;
-        this.info = resp;
+    this.cargarEquipo();
 
-      })
+
+  }
+
+  private cargarInfo(){
+
+    this.http.get('assets/data/info.json')
+    .subscribe( (resp:InfoPage) => {
+
+      this.cargada = true;
+      this.info = resp;
+
+    })
+
+
+  }
+
+  private cargarEquipo(){
+    this.http.get('https://angurlar-html-default-rtdb.firebaseio.com/equipo.json')
+    .subscribe( (resp:datosPage[]) => {
+
+      this.cargada = true;
+      this.equipo = resp;
+
+    })
 
   }
 }
+
